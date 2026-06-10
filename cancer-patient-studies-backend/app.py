@@ -1,10 +1,12 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 
 from db import get_db, init_app
 
 import os
 
 app = Flask(__name__)
+CORS(app, origins=["http://localhost:5173"])
 app.config.from_mapping(
     DATABASE=os.path.join(app.instance_path, "cancer_patient_studies.sqlite"),
 )
@@ -14,7 +16,7 @@ init_app(app)
 
 @app.route("/")
 def main_page():
-    return "<h1>Cancer Patient Studies Backend</h1>"
+    return "<h1>Cancer Patient Studies</h1>"
 
 
 @app.route("/patients")
