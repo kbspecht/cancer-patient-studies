@@ -55,6 +55,8 @@ function App() {
                 <th>State</th>
                 <th>Zip Code</th>
                 <th>Phone</th>
+                <th>Cancer Diagnosis</th>
+                <th>Relevant Genes</th>
               </tr>
             </thead>
             <tbody>
@@ -69,6 +71,8 @@ function App() {
                   <td>{patient.state}</td>
                   <td>{patient.zip_code}</td>
                   <td>{patient.phone}</td>
+                  <td>{patient.diagnosis ?? 'None'}</td>
+                  <td>{patient.genes ?? 'None'}</td>
                 </tr>
               ))}
             </tbody>

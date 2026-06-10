@@ -24,17 +24,25 @@ def patients():
     rows = get_db().execute(
         """
         SELECT
-            patient_id,
-            first_name,
-            last_name,
-            gender,
-            street_address,
-            city,
-            state,
-            zip_code,
-            phone
+            patients.patient_id,
+            patients.first_name,
+            patients.last_name,
+            patients.gender,
+            patients.street_address,
+            patients.city,
+            patients.state,
+            patients.zip_code,
+            patients.phone,
+            patient_diagnoses.diagnosis,
+            patient_genes.gene,
+            GROUP_CONCAT(patient_genes.gene, ', ') AS genes
         FROM patients
-        ORDER BY last_name, first_name
+        LEFT JOIN patient_diagnoses
+            ON patients.patient_id = patient_diagnoses.patient_id
+        LEFT JOIN patient_genes
+            ON patients.patient_id = patient_genes.patient_id
+        GROUP BY patients.patient_id
+        ORDER BY patients.last_name, patients.first_name
         """
     ).fetchall()
 
