@@ -6,19 +6,20 @@ DROP TABLE IF EXISTS patients;
 
 CREATE TABLE patients (
   patient_id VARCHAR(11) PRIMARY KEY CHECK (patient_id GLOB '[0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'),
-  first_name TEXT NOT NULL,
-  last_name TEXT NOT NULL,
-  gender TEXT NOT NULL,
-  street_address TEXT NOT NULL,
-  city TEXT NOT NULL,
-  state VARCHAR(2) NOT NULL CHECK (length(state) = 2),
-  zip_code VARCHAR(5) NOT NULL CHECK (length(zip_code) = 5 AND zip_code NOT GLOB '*[^0-9]*'),
-  phone VARCHAR(12) NOT NULL CHECK (phone GLOB '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]')
+  first_name TEXT,
+  last_name TEXT,
+  gender TEXT,
+  street_address TEXT,
+  city TEXT,
+  state VARCHAR(2) CHECK (length(state) = 2),
+  zip_code VARCHAR(5) CHECK (length(zip_code) = 5 AND zip_code NOT GLOB '*[^0-9]*'),
+  phone VARCHAR(12) CHECK (phone GLOB '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]')
 );
 
 CREATE TABLE patient_diagnoses (
-  patient_id VARCHAR(11) PRIMARY KEY CHECK (patient_id GLOB '[0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'),
+  patient_id VARCHAR(11) NOT NULL CHECK (patient_id GLOB '[0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'),
   diagnosis TEXT NOT NULL,
+  PRIMARY KEY (patient_id, diagnosis),
   FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
 );
 

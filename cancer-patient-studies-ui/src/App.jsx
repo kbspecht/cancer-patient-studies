@@ -21,6 +21,10 @@ function App() {
     loadPatients()
   }, [])
 
+  const displayValue = (value) => {
+    return value === '' || value === null || value === undefined ? 'None' : value;
+  }
+
   return (
     <main className="app-shell">
       <header className="page-header">
@@ -63,16 +67,16 @@ function App() {
               {patients.map((patient) => (
                 <tr key={patient.patient_id}>
                   <td>{patient.patient_id}</td>
-                  <td>{patient.first_name}</td>
-                  <td>{patient.last_name}</td>
-                  <td>{patient.gender}</td>
-                  <td>{patient.street_address}</td>
-                  <td>{patient.city}</td> 
-                  <td>{patient.state}</td>
-                  <td>{patient.zip_code}</td>
-                  <td>{patient.phone}</td>
-                  <td>{patient.diagnosis ?? 'None'}</td>
-                  <td>{patient.genes ?? 'None'}</td>
+                  <td>{displayValue(patient.first_name)}</td>
+                  <td>{displayValue(patient.last_name)}</td>
+                  <td>{displayValue(patient.gender)}</td>
+                  <td>{displayValue(patient.street_address)}</td>
+                  <td>{displayValue(patient.city)}</td> 
+                  <td>{displayValue(patient.state)}</td>
+                  <td>{displayValue(patient.zip_code)}</td>
+                  <td>{displayValue(patient.phone)}</td>
+                  <td>{displayValue(patient.diagnoss)}</td>
+                  <td>{displayValue(patient.genes)}</td>
                 </tr>
               ))}
             </tbody>

@@ -33,16 +33,15 @@ def patients():
             patients.state,
             patients.zip_code,
             patients.phone,
-            patient_diagnoses.diagnosis,
-            patient_genes.gene,
-            GROUP_CONCAT(patient_genes.gene, ', ') AS genes
+            GROUP_CONCAT(DISTINCT patient_diagnoses.diagnosis) AS diagnoses,
+            GROUP_CONCAT(DISTINCT patient_genes.gene) AS genes
         FROM patients
         LEFT JOIN patient_diagnoses
             ON patients.patient_id = patient_diagnoses.patient_id
         LEFT JOIN patient_genes
             ON patients.patient_id = patient_genes.patient_id
         GROUP BY patients.patient_id
-        ORDER BY patients.last_name, patients.first_name
+        ORDER BY patients.patient_id
         """
     ).fetchall()
 
