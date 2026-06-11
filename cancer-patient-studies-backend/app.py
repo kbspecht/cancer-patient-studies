@@ -46,3 +46,35 @@ def patients():
     ).fetchall()
 
     return jsonify([dict(row) for row in rows])
+
+@app.route("/patient/<patient_id>")
+def patient(patient_id):
+    row = get_db().execute(
+        """
+        SELECT
+            patients.patient_id,
+            patients.first_name,
+            patients.last_name,
+            patients.gender,
+            patients.street_address,
+            patients.city,
+            patients.state,
+            patients.zip_code,
+            patients.phone,
+            GROUP_CONCAT(DISTINCT patient_diagnoses.diagnosis) AS diagnoses,
+            GROUP_CONCAT(DISTINCT patient_genes.gene) AS genes
+        FROM patients
+        LEFT JOIN patient_diagnoses
+            ON patients.patient_id = patient_diagnoses.patient_id
+        LEFT JOIN patient_genes
+            ON patients.patient_id = patient_genes.patient_id
+        WHERE patients.patient_id = ?
+        GROUP BY patients.patient_id
+        """,
+        (patient_id,)
+    ).fetchone()
+
+    if row is None:
+        return jsonify({"error": "Patient not found"}), 404
+
+    return jsonify(dict(row))
