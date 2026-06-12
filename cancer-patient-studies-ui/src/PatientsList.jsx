@@ -32,7 +32,7 @@ function PatientsList() {
     setFilters(initialFilters)
   }
 
-  // Function to filter the list of patients based on the current filter values
+  // Filter the list of patients based on the current filter values
   const filteredPatients = useMemo(() => {
 
     // Helper function to check if a value matches a search term
@@ -59,7 +59,7 @@ function PatientsList() {
         setPatients(response.data)
         setStatus('ready')
       } catch (err) {
-        setError(err.message)
+        setError(err.response?.data?.error || err.message)
         setStatus('error')
       }
   }

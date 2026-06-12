@@ -15,7 +15,7 @@ function PatientDetail(props) {
         setPatient(response.data)
         setStatus('ready')
       } catch (err) {
-        setError(err.message)
+        setError(err.response?.data?.error || err.message)
         setStatus('error')
       }
   }

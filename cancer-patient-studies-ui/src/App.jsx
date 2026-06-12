@@ -18,6 +18,14 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/patient/:id" element={<PatientDetailWrapper />} />
+        <Route path="/patient" element={
+          <header className="page-header">
+            <div>
+              <h1>You must enter a patient ID.</h1>
+              <Link className="button button-secondary" to="/">Back to Main Page</Link>
+            </div>
+          </header>
+        } />
         <Route path='/patients' element={<PatientsList />} />
         <Route path="*" element={
           <main className="app-shell">
