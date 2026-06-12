@@ -16,21 +16,18 @@ function App() {
     // React Router setup for the Cancer Patient Studies front end application
     <BrowserRouter>
       <Routes>
-        // main page route
         <Route path="/" element={<MainPage />} />
-
-        // route for displaying a specific patient's details
         <Route path="/patient/:id" element={<PatientDetailWrapper />} />
-
-        // route for displaying the list of all patients
         <Route path='/patients' element={<PatientsList />} />
-
-        // route for handling invalid URLs
         <Route path="*" element={
-          <div>
-            <h1>Invalid URL</h1>
-            <Link className="button button-secondary" to="/">Back to Main Page</Link>
-          </div>
+          <main className="app-shell">
+            <header className="page-header">
+              <div>
+                <h1>Invalid URL</h1>
+                <Link className="button button-secondary" to="/">Back to Main Page</Link>
+              </div>
+            </header>
+          </main>
         } /> 
       </Routes>
     </BrowserRouter>

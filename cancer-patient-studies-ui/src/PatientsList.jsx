@@ -76,11 +76,12 @@ function PatientsList() {
           <h1>Cancer Patient Studies</h1>
           <h2>Full Patient Data</h2>
         </div>
-        <div className="summary">
-          <span className="summary-value">{patients.length}</span>
-          <span className="summary-label">patients loaded</span>
-        </div>
       </header>
+
+      <div className="summary">
+        <span className="summary-value">{patients.length}</span>
+        <span className="summary-label">patients loaded</span>
+      </div>
 
       <div className="action-row">
         <Link className="button button-secondary" to="/">Back to Main Page</Link>

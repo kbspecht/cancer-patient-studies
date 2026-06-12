@@ -32,11 +32,12 @@ function PatientDetail(props) {
           <h1>Cancer Patient Studies</h1>
           <h2>Patient Summary</h2>
         </div>
-        <div className="summary">
-          <span className="summary-label">Patient</span>
-          <span className="summary-value">{props.patientId}</span>
-        </div>
       </header>
+
+      <div className="summary">
+        <span className="summary-label">Patient</span>
+        <span className="summary-value">{props.patientId}</span>
+      </div>
 
       <div className="action-row">
         <Link className="button button-secondary" to="/">Back to Main Page</Link>
