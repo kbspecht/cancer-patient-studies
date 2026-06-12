@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom'
 import axios from "axios";
 
+// Initial filter values for the patients list
 const initialFilters = {
   firstName: '',
   lastName: '',
@@ -10,12 +11,14 @@ const initialFilters = {
   genes: '',
 }
 
+// Component for displaying a list of patients
 function PatientsList() {
   const [patients, setPatients] = useState([])
   const [status, setStatus] = useState('loading')
   const [error, setError] = useState('')
   const [filters, setFilters] = useState(initialFilters)
 
+  // Function to update the current filter values
   const updateFilter = (event) => {
     const { name, value } = event.target
     setFilters((currentFilters) => ({
@@ -24,11 +27,15 @@ function PatientsList() {
     }))
   }
 
+  // Function to clear all filter values
   const clearFilters = () => {
     setFilters(initialFilters)
   }
 
+  // Function to filter the list of patients based on the current filter values
   const filteredPatients = useMemo(() => {
+
+    // Helper function to check if a value matches a search term
     const matches = (value, search) =>
       String(value ?? '').toLowerCase().includes(search.trim().toLowerCase())
 
@@ -40,9 +47,12 @@ function PatientsList() {
       matches(patient.genes, filters.genes)
     ))
   }, [filters, patients])
+  // Memo prevents unnecessary re-computation of the filtered list on every render
 
+  // Check if any filters are currently active
   const hasFilters = Object.values(filters).some((value) => value.trim() !== '')
 
+  // Function to load the list of patients from the API
   const loadPatients = async() => {
     try {
         const response = await axios.get('http://127.0.0.1:5000/patients')
@@ -53,6 +63,8 @@ function PatientsList() {
         setStatus('error')
       }
   }
+
+  // Load the list of patients when the component mounts
   useEffect(() => {
     loadPatients()
   }, [])
@@ -75,15 +87,13 @@ function PatientsList() {
       </div>
 
       {status === 'loading' && <p className="status">Loading patient records...</p>}
-
       {status === 'error' && (
         <p className="status error">
           Unable to load patients from Flask: {error}
         </p>
       )}
-
       {status === 'ready' && (
-        <section className="table-wrap" aria-label="Patient records">
+        <section className="table-wrap">
           <table>
             <thead>
               <tr>

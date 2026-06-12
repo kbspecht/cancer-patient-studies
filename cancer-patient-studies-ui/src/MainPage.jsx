@@ -1,5 +1,6 @@
 import {useState} from 'react'
 
+// Main page component for the Cancer Patient Studies front end application
 function MainPage() {
   const [patientId, setPatientId] = useState('')
 
@@ -8,7 +9,7 @@ function MainPage() {
       <header className="page-header">
         <div>
           <h1>Cancer Patient Studies</h1>
-          <h3>Welcome to the Cancer Patient Studies app! Here you can view and manage patient data to determine which patients may be eligible for clinical study.</h3>
+          <h3>Welcome to the Cancer Patient Studies app! Here you can view patient data to determine which patients may be eligible for clinical study.</h3>
           <h2>Choose a patient view:</h2>
         </div>
       </header>

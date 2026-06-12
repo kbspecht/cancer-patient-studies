@@ -2,11 +2,13 @@ import axios from "axios"
 import {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 
+// Component for displaying the details of a specific patient
 function PatientDetail(props) {
   const [patient, setPatient] = useState(null);
   const [status, setStatus] = useState('loading');
   const [error, setError] = useState(null);
 
+  // Function to load a patient's details from the API
   const loadPatient = async() => {
     try {
         const response = await axios.get(`http://127.0.0.1:5000/patient/${props.patientId}`)
@@ -17,6 +19,8 @@ function PatientDetail(props) {
         setStatus('error')
       }
   }
+
+  // Load the patient's details when the component mounts
   useEffect(() => {
     loadPatient()
   }, [])
@@ -40,7 +44,6 @@ function PatientDetail(props) {
 
       {status === 'loading' && <p className="status">Loading patient record...</p>}
       {status === 'error' && <p className="status error">Unable to load patient: {error}</p>}
-
       {status === 'ready' && (
         <section className="detail-panel">
           <div className="detail-row">

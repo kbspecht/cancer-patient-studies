@@ -5,20 +5,29 @@ from db import get_db, init_app
 
 import os
 
+"""
+The main Flask application for the Cancer Patient Studies back end application.
+"""
+
+# create the Flask app, set up CORS and database
 app = Flask(__name__)
 CORS(app, origins=["http://localhost:5173"])
 app.config.from_mapping(
     DATABASE=os.path.join(app.instance_path, "cancer_patient_studies.sqlite"),
 )
+
+# create the instance folder if it doesn't exist
 os.makedirs(app.instance_path, exist_ok=True)
+
+# initialize app
 init_app(app)
 
-
+# main page route
 @app.route("/")
 def main_page():
     return "<h1>Cancer Patient Studies</h1>"
 
-
+# route to get all patients
 @app.route("/patients")
 def patients():
     rows = get_db().execute(
@@ -47,6 +56,7 @@ def patients():
 
     return jsonify([dict(row) for row in rows])
 
+# route to get a specific patient by ID
 @app.route("/patient/<patient_id>")
 def patient(patient_id):
     row = get_db().execute(
