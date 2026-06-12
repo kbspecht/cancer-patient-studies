@@ -64,11 +64,11 @@ function PatientDetail(props) {
             <span>{patient?.phone}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Diagnoses</span>
+            <span className="detail-label">Cancer Diagnoses</span>
             <span>{patient?.diagnoses}</span>
           </div>
           <div className="detail-row">
-            <span className="detail-label">Genes</span>
+            <span className="detail-label">Relevant Genes</span>
             <span>{patient?.genes}</span>
           </div>
         </section>

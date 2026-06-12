@@ -107,7 +107,7 @@ function PatientsList() {
                 <th>State</th>
                 <th>Zip Code</th>
                 <th>Phone</th>
-                <th>Cancer Diagnosis</th>
+                <th>Cancer Diagnoses</th>
                 <th>Relevant Genes</th>
               </tr>
               <tr className="filter-row">
