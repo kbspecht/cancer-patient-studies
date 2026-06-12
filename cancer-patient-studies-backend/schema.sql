@@ -20,7 +20,7 @@ CREATE TABLE patients (
 -- Table for patient diagnoses
 CREATE TABLE patient_diagnoses (
   patient_id VARCHAR(11) NOT NULL CHECK (patient_id GLOB '[0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'),
-  diagnosis TEXT NOT NULL,
+  diagnosis TEXT NOT NULL COLLATE NOCASE,
   PRIMARY KEY (patient_id, diagnosis),
   FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
 );
@@ -28,7 +28,7 @@ CREATE TABLE patient_diagnoses (
 -- Table for patient genes
 CREATE TABLE patient_genes (
   patient_id VARCHAR(11) NOT NULL CHECK (patient_id GLOB '[0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'),
-  gene VARCHAR(3) NOT NULL CHECK (length(gene) = 3),
+  gene VARCHAR(3) NOT NULL CHECK (length(gene) = 3) COLLATE NOCASE,
   PRIMARY KEY (patient_id, gene),
   FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
 );
