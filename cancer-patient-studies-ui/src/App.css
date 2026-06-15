@@ -220,6 +220,14 @@ th {
 .filter-row th {
   padding: 8px;
   background: #f7fbfa;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.filter-row th:first-child {
+  left: 0;
+  z-index: 3;
 }
 
 .filter-row .empty-filter-cell {
