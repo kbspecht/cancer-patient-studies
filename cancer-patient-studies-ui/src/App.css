@@ -266,9 +266,13 @@ tbody tr:hover {
 }
 
 .empty-results {
+  position: sticky;
+  left: 0;
+  z-index: 2;
   margin: 0;
   padding: 20px;
   border-top: 1px solid #e7eeec;
+  background: #ffffff;
   color: #55706f;
 }
 
