@@ -42,7 +42,9 @@ def patients():
             patients.state,
             patients.zip_code,
             patients.phone,
+            patients.comment,
             REPLACE(GROUP_CONCAT(DISTINCT patient_diagnoses.diagnosis), ',', ', ') AS diagnoses,
+            REPLACE(GROUP_CONCAT(DISTINCT patient_diagnoses.stage), ',', ', ') AS stages,
             REPLACE(GROUP_CONCAT(DISTINCT patient_genes.gene), ',', ', ') AS genes
         FROM patients
         LEFT JOIN patient_diagnoses
@@ -71,7 +73,9 @@ def patient(patient_id):
             patients.state,
             patients.zip_code,
             patients.phone,
+            patients.comment,
             REPLACE(GROUP_CONCAT(DISTINCT patient_diagnoses.diagnosis), ',', ', ') AS diagnoses,
+            REPLACE(GROUP_CONCAT(DISTINCT patient_diagnoses.stage), ',', ', ') AS stages,
             REPLACE(GROUP_CONCAT(DISTINCT patient_genes.gene), ',', ', ') AS genes
         FROM patients
         LEFT JOIN patient_diagnoses

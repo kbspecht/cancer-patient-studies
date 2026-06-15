@@ -53,7 +53,8 @@ def load_csv_data():
                 city,
                 state,
                 zip_code,
-                phone
+                phone,
+                comment
             )
             VALUES (
                 :patient_id,
@@ -64,7 +65,8 @@ def load_csv_data():
                 :city,
                 :state,
                 :zip_code,
-                :phone
+                :phone,
+                :comment
             )
             """,
             patients,
@@ -75,8 +77,8 @@ def load_csv_data():
         diagnoses = csv.DictReader(diagnosis_file)
         db.executemany(
             """
-            INSERT OR REPLACE INTO patient_diagnoses (patient_id, diagnosis)
-            VALUES (:patient_id, :diagnosis)
+            INSERT OR REPLACE INTO patient_diagnoses (patient_id, diagnosis, stage)
+            VALUES (:patient_id, :diagnosis, :stage)
             """,
             diagnoses,
         )

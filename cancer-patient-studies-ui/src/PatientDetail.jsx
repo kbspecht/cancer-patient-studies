@@ -44,7 +44,7 @@ function PatientDetail(props) {
       </div>
 
       {status === 'loading' && <p className="status">Loading patient record...</p>}
-      {status === 'error' && <p className="status error">Unable to load patient: {error}</p>}
+      {status === 'error' && <p className="status error">Unable to load patient from Flask: {error}</p>}
       {status === 'ready' && (
         <section className="detail-panel">
           <div className="detail-row">
@@ -64,8 +64,16 @@ function PatientDetail(props) {
             <span>{patient?.phone}</span>
           </div>
           <div className="detail-row">
+            <span className="detail-label">Comment</span>
+            <span>{patient?.comment}</span>
+          </div>
+          <div className="detail-row">
             <span className="detail-label">Cancer Diagnoses</span>
             <span>{patient?.diagnoses}</span>
+          </div>
+          <div className="detail-row">
+            <span className="detail-label">Cancer Diagnosis Stages</span>
+            <span>{patient?.stages}</span>
           </div>
           <div className="detail-row">
             <span className="detail-label">Relevant Genes</span>

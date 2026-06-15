@@ -14,13 +14,15 @@ CREATE TABLE patients (
   city TEXT,
   state VARCHAR(2) CHECK (length(state) = 2),
   zip_code VARCHAR(5) CHECK (length(zip_code) = 5 AND zip_code NOT GLOB '*[^0-9]*'),
-  phone VARCHAR(12) CHECK (phone GLOB '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]')
+  phone VARCHAR(12) CHECK (phone GLOB '[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'),
+  comment TEXT
 );
 
 -- Table for patient diagnoses
 CREATE TABLE patient_diagnoses (
   patient_id VARCHAR(11) NOT NULL CHECK (patient_id GLOB '[0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]'),
   diagnosis TEXT NOT NULL COLLATE NOCASE,
+  stage INT,
   PRIMARY KEY (patient_id, diagnosis),
   FOREIGN KEY (patient_id) REFERENCES patients(patient_id)
 );

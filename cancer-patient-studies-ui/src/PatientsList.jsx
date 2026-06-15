@@ -8,6 +8,7 @@ const initialFilters = {
   lastName: '',
   state: '',
   diagnoses: '',
+  stages: '',
   genes: '',
 }
 
@@ -44,6 +45,7 @@ function PatientsList() {
       matches(patient.last_name, filters.lastName) &&
       matches(patient.state, filters.state) &&
       matches(patient.diagnoses, filters.diagnoses) &&
+      matches(patient.stages, filters.stages) &&
       matches(patient.genes, filters.genes)
     ))
   }, [filters, patients])
@@ -107,7 +109,9 @@ function PatientsList() {
                 <th>State</th>
                 <th>Zip Code</th>
                 <th>Phone</th>
+                <th>Comment</th>
                 <th>Cancer Diagnoses</th>
+                <th>Cancer Diagnosis Stages</th>
                 <th>Relevant Genes</th>
               </tr>
               <tr className="filter-row">
@@ -138,10 +142,18 @@ function PatientsList() {
                 /></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <th><input
                   name="diagnoses"
                   type="search"
                   value={filters.diagnoses}
+                  onChange={updateFilter}
+                  placeholder="Filter..."
+                /></th>
+                <th><input
+                  name="stages"
+                  type="search"
+                  value={filters.stages}
                   onChange={updateFilter}
                   placeholder="Filter..."
                 /></th>
@@ -166,7 +178,9 @@ function PatientsList() {
                   <td>{patient.state}</td>
                   <td>{patient.zip_code}</td>
                   <td>{patient.phone}</td>
+                  <td>{patient.comment}</td>
                   <td>{patient.diagnoses}</td>
+                  <td>{patient.stages}</td>
                   <td>{patient.genes}</td>
                 </tr>
               ))}
