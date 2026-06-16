@@ -1,12 +1,14 @@
 import axios from "axios"
 import {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
+import EditPatientModal from "./EditPatientModal"
 
 // Component for displaying the details of a specific patient
 function PatientDetail(props) {
   const [patient, setPatient] = useState(null);
   const [status, setStatus] = useState('loading');
   const [error, setError] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   // Function to load a patient's details from the API
   const loadPatient = async() => {
@@ -19,6 +21,20 @@ function PatientDetail(props) {
         setStatus('error')
       }
   }
+
+  // Function to upload edits to a patient
+  const uploadPatientEdits = async (updatedPatient) => {
+    try {
+      await axios.put(`http://127.0.0.1:5000/patient/${updatedPatient.patient_id}`, updatedPatient);
+      setShowEditModal(false);
+      const response = await axios.get(`http://127.0.0.1:5000/patient/${updatedPatient.patient_id}`);
+      setPatient(response.data);
+      setStatus('ready');
+    } catch (err) {
+      setError(err.response?.data?.error || err.message);
+      setStatus('error');
+    }
+  };
 
   // Load the patient's details when the component mounts
   useEffect(() => {
@@ -79,6 +95,10 @@ function PatientDetail(props) {
             <span className="detail-label">Relevant Genes</span>
             <span>{patient?.genes}</span>
           </div>
+          <button className="button button-primary" onClick={() => setShowEditModal(true)}>
+            Edit Patient
+          </button>
+          <EditPatientModal patient={patient} isOpen={showEditModal} onSave={(updatedPatient) => uploadPatientEdits(updatedPatient)} onClose={() => setShowEditModal(false)} />
         </section>
       )}
     </main>

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom'
 import axios from "axios";
+import EditPatientModal from "./EditPatientModal"
 
 // Initial filter values for the patients list
 const initialFilters = {
@@ -18,6 +19,8 @@ function PatientsList() {
   const [status, setStatus] = useState('loading')
   const [error, setError] = useState('')
   const [filters, setFilters] = useState(initialFilters)
+  const [editPatientId, setEditPatientId] = useState(null)
+  const [showEditModal, setShowEditModal] = useState(false)
 
   // Function to update the current filter values
   const updateFilter = (event) => {
@@ -66,6 +69,22 @@ function PatientsList() {
       }
   }
 
+  // Function to upload edits to a patient
+  const uploadPatientEdits = async (updatedPatient) => {
+    try {
+      await axios.put(`http://127.0.0.1:5000/patient/${updatedPatient.patient_id}`, updatedPatient);
+      setShowEditModal(false);
+      const response = await axios.get(`http://127.0.0.1:5000/patient/${updatedPatient.patient_id}`);
+      setPatients((prevPatients) =>
+        prevPatients.map((p) => (p.patient_id === updatedPatient.patient_id ? response.data : p))
+      );
+      setStatus('ready');
+    } catch (err) {
+      setError(err.response?.data?.error || err.message);
+      setStatus('error');
+    }
+  };
+
   // Load the list of patients when the component mounts
   useEffect(() => {
     loadPatients()
@@ -113,6 +132,7 @@ function PatientsList() {
                 <th>Cancer Diagnoses</th>
                 <th>Cancer Diagnosis Stages</th>
                 <th>Relevant Genes</th>
+                <th></th>
               </tr>
               <tr className="filter-row">
                 <th><button type="button" onClick={clearFilters} disabled={!hasFilters}>Clear</button></th>
@@ -164,6 +184,7 @@ function PatientsList() {
                   onChange={updateFilter}
                   placeholder="Filter..."
                 /></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -182,6 +203,10 @@ function PatientsList() {
                   <td>{patient.diagnoses}</td>
                   <td>{patient.stages}</td>
                   <td>{patient.genes}</td>
+                  <td><button type="button" onClick={() => {
+                    setEditPatientId(patient.patient_id);
+                    setShowEditModal(true);
+                  }}>Edit</button></td>
                 </tr>
               ))}
             </tbody>
@@ -191,6 +216,10 @@ function PatientsList() {
           )}
         </section>
       )}
+      {showEditModal && <EditPatientModal patient={filteredPatients.find(p => p.patient_id === editPatientId)} isOpen={showEditModal} onSave={(updatedPatient) => uploadPatientEdits(updatedPatient)} onClose={() => {
+        setEditPatientId(null);
+        setShowEditModal(false);
+      }} />}
     </main>
   )
 }

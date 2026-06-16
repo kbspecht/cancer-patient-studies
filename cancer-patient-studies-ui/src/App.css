@@ -276,6 +276,14 @@ tbody tr:hover {
   color: #55706f;
 }
 
+.ReactModal__Overlay {
+  z-index: 1000 !important;
+}
+
+.ReactModal__Content {
+  z-index: 1001 !important;
+}
+
 @media (max-width: 700px) {
   .app-shell {
     width: min(100vw - 24px, 1120px);
