@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom'
 import axios from "axios";
 import EditPatientModal from "./EditPatientModal"
+import DeletePatientModal from "./DeletePatientModal"
 
 // Initial filter values for the patients list
 const initialFilters = {
@@ -21,6 +22,8 @@ function PatientsList() {
   const [filters, setFilters] = useState(initialFilters)
   const [editPatientId, setEditPatientId] = useState(null)
   const [showEditModal, setShowEditModal] = useState(false)
+  const [deletePatientId, setDeletePatientId] = useState(null)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
 
   // Function to update the current filter values
   const updateFilter = (event) => {
@@ -74,10 +77,25 @@ function PatientsList() {
     try {
       await axios.put(`http://127.0.0.1:5000/patient/${updatedPatient.patient_id}`, updatedPatient);
       setShowEditModal(false);
+      setEditPatientId(null);
       const response = await axios.get(`http://127.0.0.1:5000/patient/${updatedPatient.patient_id}`);
       setPatients((prevPatients) =>
         prevPatients.map((p) => (p.patient_id === updatedPatient.patient_id ? response.data : p))
       );
+      setStatus('ready');
+    } catch (err) {
+      setError(err.response?.data?.error || err.message);
+      setStatus('error');
+    }
+  };
+
+  // Function to delete a patient
+  const deletePatient = async (id) => {
+    try {
+      await axios.delete(`http://127.0.0.1:5000/patient/${id}`);
+      setPatients((prevPatients) => prevPatients.filter((p) => p.patient_id !== id));
+      setDeletePatientId(null);
+      setShowDeleteModal(false);
       setStatus('ready');
     } catch (err) {
       setError(err.response?.data?.error || err.message);
@@ -133,6 +151,7 @@ function PatientsList() {
                 <th>Cancer Diagnosis Stages</th>
                 <th>Relevant Genes</th>
                 <th></th>
+                <th></th>
               </tr>
               <tr className="filter-row">
                 <th><button type="button" onClick={clearFilters} disabled={!hasFilters}>Clear</button></th>
@@ -185,6 +204,7 @@ function PatientsList() {
                   placeholder="Filter..."
                 /></th>
                 <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -207,6 +227,10 @@ function PatientsList() {
                     setEditPatientId(patient.patient_id);
                     setShowEditModal(true);
                   }}>Edit</button></td>
+                  <td><button type="button" onClick={() => {
+                    setDeletePatientId(patient.patient_id);
+                    setShowDeleteModal(true);
+                  }}>Delete</button></td>
                 </tr>
               ))}
             </tbody>
@@ -219,6 +243,10 @@ function PatientsList() {
       {showEditModal && <EditPatientModal patient={filteredPatients.find(p => p.patient_id === editPatientId)} isOpen={showEditModal} onSave={(updatedPatient) => uploadPatientEdits(updatedPatient)} onClose={() => {
         setEditPatientId(null);
         setShowEditModal(false);
+      }} />}
+      {showDeleteModal && <DeletePatientModal id={deletePatientId} isOpen={showDeleteModal} onSave={(id) => deletePatient(id)} onClose={() => {
+        setDeletePatientId(null);
+        setShowDeleteModal(false);
       }} />}
     </main>
   )

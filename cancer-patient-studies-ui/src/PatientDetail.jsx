@@ -2,6 +2,7 @@ import axios from "axios"
 import {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import EditPatientModal from "./EditPatientModal"
+import DeletePatientModal from "./DeletePatientModal"
 
 // Component for displaying the details of a specific patient
 function PatientDetail(props) {
@@ -9,6 +10,7 @@ function PatientDetail(props) {
   const [status, setStatus] = useState('loading');
   const [error, setError] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Function to load a patient's details from the API
   const loadPatient = async() => {
@@ -30,6 +32,18 @@ function PatientDetail(props) {
       const response = await axios.get(`http://127.0.0.1:5000/patient/${updatedPatient.patient_id}`);
       setPatient(response.data);
       setStatus('ready');
+    } catch (err) {
+      setError(err.response?.data?.error || err.message);
+      setStatus('error');
+    }
+  };
+
+  // Function to delete a patient
+  const deletePatient = async (id) => {
+    try {
+      await axios.delete(`http://127.0.0.1:5000/patient/${id}`);
+      setShowDeleteModal(false);
+      window.location.href = '/';
     } catch (err) {
       setError(err.response?.data?.error || err.message);
       setStatus('error');
@@ -98,7 +112,11 @@ function PatientDetail(props) {
           <button className="button button-primary" onClick={() => setShowEditModal(true)}>
             Edit Patient
           </button>
+          <button className="button button-secondary" onClick={() => setShowDeleteModal(true)}>
+            Delete Patient
+          </button>
           <EditPatientModal patient={patient} isOpen={showEditModal} onSave={(updatedPatient) => uploadPatientEdits(updatedPatient)} onClose={() => setShowEditModal(false)} />
+          <DeletePatientModal id={patient?.patient_id} isOpen={showDeleteModal} onSave={(id) => deletePatient(id)} onClose={() => setShowDeleteModal(false)} />
         </section>
       )}
     </main>

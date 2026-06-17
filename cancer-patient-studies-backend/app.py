@@ -58,8 +58,8 @@ def patients():
 
     return jsonify([dict(row) for row in rows])
 
-# route to get a specific patient by ID or update their information
-@app.route("/patient/<patient_id>", methods=["GET", "PUT"])
+# route to get a specific patient by ID, update their information, or delete them
+@app.route("/patient/<patient_id>", methods=["GET", "PUT", "DELETE"])
 def patient(patient_id):
     if request.method == "GET":
         row = get_db().execute(
@@ -121,3 +121,14 @@ def patient(patient_id):
         get_db().commit()
 
         return jsonify({"message": "Patient updated successfully"})
+    elif request.method == "DELETE":
+        get_db().execute(
+            """
+            DELETE FROM patients
+            WHERE patient_id = ?
+            """,
+            (patient_id,)
+        )
+        get_db().commit()
+
+        return jsonify({"message": "Patient deleted successfully"})
