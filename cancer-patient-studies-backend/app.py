@@ -59,7 +59,7 @@ def patients():
     return jsonify([dict(row) for row in rows])
 
 # route to get a specific patient by ID, update their information, or delete them
-@app.route("/patient/<patient_id>", methods=["GET", "PUT", "DELETE"])
+@app.route("/patient/<patient_id>", methods=["GET", "POST", "PUT", "DELETE"])
 def patient(patient_id):
     if request.method == "GET":
         row = get_db().execute(
@@ -93,6 +93,33 @@ def patient(patient_id):
             return jsonify({"error": "Patient not found"}), 404
 
         return jsonify(dict(row))
+    elif request.method == "POST":
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+
+        # Insert the new patient into the database
+        get_db().execute(
+            """
+            INSERT INTO patients (patient_id, first_name, last_name, gender, street_address, city, state, zip_code, phone, comment)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                data.get("patient_id"),
+                data.get("first_name"),
+                data.get("last_name"),
+                data.get("gender"),
+                data.get("street_address"),
+                data.get("city"),
+                data.get("state"),
+                data.get("zip_code"),
+                data.get("phone"),
+                data.get("comment")
+            )
+        )
+        get_db().commit()
+
+        return jsonify({"message": "Patient added successfully"})
     elif request.method == "PUT":
         data = request.get_json()
         if not data:

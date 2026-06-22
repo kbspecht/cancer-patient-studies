@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom'
 import axios from "axios";
+import AddPatientModal from "./AddPatientModal"
 import EditPatientModal from "./EditPatientModal"
 import DeletePatientModal from "./DeletePatientModal"
 
@@ -22,6 +23,7 @@ function PatientsList() {
   const [filters, setFilters] = useState(initialFilters)
   const [editPatientId, setEditPatientId] = useState(null)
   const [showEditModal, setShowEditModal] = useState(false)
+  const [showAddModal, setShowAddModal] = useState(false)
   const [deletePatientId, setDeletePatientId] = useState(null)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
 
@@ -71,6 +73,20 @@ function PatientsList() {
         setStatus('error')
       }
   }
+
+  // Function to upload a new patient to the API
+  const uploadPatient = async (newPatient) => {
+    try {
+      await axios.post(`http://127.0.0.1:5000/patient/${newPatient.patient_id}`, newPatient);
+      setShowAddModal(false);
+      const response = await axios.get('http://127.0.0.1:5000/patients');
+      setPatients(response.data);
+      setStatus('ready');
+    } catch (err) {
+      setError(err.response?.data?.error || err.message);
+      setStatus('error');
+    }
+  };
 
   // Function to upload edits to a patient
   const uploadPatientEdits = async (updatedPatient) => {
@@ -124,6 +140,9 @@ function PatientsList() {
 
       <div className="action-row">
         <Link className="button button-secondary" to="/">Back to Main Page</Link>
+        <button className="button" onClick={() => setShowAddModal(true)}>
+          Add Patient
+        </button>
       </div>
 
       {status === 'loading' && <p className="status">Loading patient records...</p>}
@@ -240,6 +259,9 @@ function PatientsList() {
           )}
         </section>
       )}
+      {showAddModal && <AddPatientModal isOpen={showAddModal} onSave={(newPatient) => uploadPatient(newPatient)} onClose={() => {
+        setShowAddModal(false);
+      }} />}
       {showEditModal && <EditPatientModal patient={filteredPatients.find(p => p.patient_id === editPatientId)} isOpen={showEditModal} onSave={(updatedPatient) => uploadPatientEdits(updatedPatient)} onClose={() => {
         setEditPatientId(null);
         setShowEditModal(false);
